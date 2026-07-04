@@ -432,6 +432,14 @@ const htmlTemplate = `<!DOCTYPE html>
         <div class="meta-label">Submission Date</div>
         <div class="meta-value">July 4, 2026</div>
       </div>
+      <div style="grid-column: span 2; margin-top: 0.5rem;">
+        <div class="meta-label">GitHub Repository</div>
+        <div class="meta-value">
+          <a href="https://github.com/HARISHPG21/Job-Scheduler" target="_blank" style="color: #4f46e5; text-decoration: none; font-weight: 600;">
+            https://github.com/HARISHPG21/Job-Scheduler
+          </a>
+        </div>
+      </div>
     </div>
   </div>
 
