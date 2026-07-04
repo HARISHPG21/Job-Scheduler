@@ -511,6 +511,33 @@ Snapshots:   0 total
 Time:        15.218 s
 Ran all test suites.
     </code></pre>
+  <!-- Section 8: Web Dashboard Screenshots -->
+  <div class="page-break">
+    <h1>8. Web Dashboard Interfaces</h1>
+    <p>Below are screenshots of the fully functional React/TypeScript monitoring dashboard showing active worker heartbeats, queue priorities, sliding window rate limits, cron triggers, and execution traces:</p>
+    
+    <div style="display: flex; flex-direction: column; gap: 2rem; margin-top: 2rem;">
+      <div>
+        <h3 style="margin-bottom: 0.5rem;">A. Overview Dashboard (Real-time telemetry and task orchestration metrics)</h3>
+        <img src="./docs/screenshots/dashboard.png" alt="Overview Dashboard" style="width: 100%; border-radius: 12px; border: 1px solid var(--border); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);" />
+      </div>
+      <div class="page-break">
+        <h3 style="margin-bottom: 0.5rem;">B. Jobs Explorer & Execution Logs (Complete task state list and stdout traces)</h3>
+        <img src="./docs/screenshots/jobs.png" alt="Jobs Explorer" style="width: 100%; border-radius: 12px; border: 1px solid var(--border); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);" />
+      </div>
+      <div class="page-break">
+        <h3 style="margin-bottom: 0.5rem;">C. Job Queue Management (Configure priorities, concurrency limits, and retry policy backoffs)</h3>
+        <img src="./docs/screenshots/queues.png" alt="Queue Management" style="width: 100%; border-radius: 12px; border: 1px solid var(--border); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);" />
+      </div>
+      <div class="page-break">
+        <h3 style="margin-bottom: 0.5rem;">D. Worker Nodes Monitor (Track CPU/RAM utilization and active task allocations)</h3>
+        <img src="./docs/screenshots/workers.png" alt="Worker Monitor" style="width: 100%; border-radius: 12px; border: 1px solid var(--border); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);" />
+      </div>
+      <div class="page-break">
+        <h3 style="margin-bottom: 0.5rem;">E. Cron Recurring Schedules (Automated background execution triggers)</h3>
+        <img src="./docs/screenshots/cron.png" alt="Cron Schedules" style="width: 100%; border-radius: 12px; border: 1px solid var(--border); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);" />
+      </div>
+    </div>
   </div>
 
   <!-- Mermaid.js Render Engine -->
