@@ -903,9 +903,67 @@ Snapshots:   0 total
 Time:        15.218 s
 Ran all test suites.
     </code></pre>
+  </div>
+
+  <!-- Section 7.5: Architecture Diagrams -->
+  <div>
+    <h1>8. Architecture & Flow Diagrams</h1>
+
+    <h2>A. Reliability &amp; Job Claim Sequence</h2>
+    <p>This sequence diagram shows how a worker node atomically claims a job, streams logs, and commits the final execution state through the API coordinator:</p>
+    <pre class="mermaid">
+sequenceDiagram
+  participant Worker as Worker Node
+  participant Server as API Server
+  participant DB as SQLite (Prisma)
+  Worker->>Server: POST /api/workers/claim (workerId)
+  Server->>DB: Start Interactive Transaction
+  DB->>DB: Lock next eligible Job row
+  DB->>DB: Validate Concurrency Rate limits and Parent deps
+  DB->>DB: Update status = RUNNING assign workerId
+  Server-->>Worker: Return Job payload and executionId
+  Worker->>Server: POST /api/workers/jobs/:jobId/log (stdout)
+  Server->>DB: INSERT JobLog record
+  Worker->>Server: POST /api/workers/complete (output)
+  Server->>DB: Update status = COMPLETED log finish times
+  Server-->>Worker: 200 OK committed
+    </pre>
+
+    <h2>B. REST API Routing Tree</h2>
+    <p>All coordinator endpoints are structured logically by resource context under a single Express router:</p>
+    <pre class="mermaid">
+flowchart TB
+  API["API Router - Express /api"]
+  Auth["/api/auth - register and login"]
+  Projects["/api/projects - GET POST"]
+  Queues["/api/queues - GET POST PUT /:id"]
+  Jobs["/api/jobs - POST batch GET /:id cancel"]
+  Workers["/api/workers - register heartbeat claim complete fail"]
+  DLQ["/api/jobs/dlq - GET retry purge"]
+  API --> Auth
+  API --> Projects
+  API --> Queues
+  API --> Jobs
+  API --> Workers
+  API --> DLQ
+    </pre>
+
+    <h2>C. Automated Testing Context</h2>
+    <p>The Jest test runner creates a sandboxed <code>test.db</code> environment, executes all 9 integration checks, asserts outputs, and tears down the database:</p>
+    <pre class="mermaid">
+flowchart LR
+  Setup["Create Sandbox test.db"]
+  Run["Jest 9 E2E Integration Checks"]
+  Assert["Assert Concurrency Rate limits and Backoffs"]
+  Cleanup["Tear Down - Remove test.db"]
+  Setup --> Run --> Assert --> Cleanup
+    </pre>
+  </div>
+
   <!-- Section 8: Web Dashboard Screenshots -->
   <div>
-    <h1>8. Web Dashboard Interfaces</h1>
+    <h1>9. Web Dashboard Interfaces</h1>
+
     <p>Below are screenshots of the fully functional React/TypeScript monitoring dashboard showing active worker heartbeats, queue priorities, sliding window rate limits, cron triggers, and execution traces:</p>
     <div style="display: flex; flex-direction: column; gap: 0.5rem; margin-top: 0.5rem;">
       <div>
