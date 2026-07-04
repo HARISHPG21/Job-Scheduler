@@ -246,6 +246,29 @@
       height: auto !important;
     }
 
+    /* ER Diagram expanded wrapper */
+    .er-diagram-wrapper {
+      width: 100%;
+      min-height: 480px;
+      padding: 1.5rem 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      page-break-inside: avoid;
+      break-inside: avoid;
+    }
+
+    .er-diagram-wrapper pre.mermaid {
+      width: 100%;
+      margin: 0;
+    }
+
+    .er-diagram-wrapper pre.mermaid svg {
+      min-height: 440px !important;
+      max-width: 100% !important;
+      height: auto !important;
+    }
+
     /* Print instruction banner */
     .banner {
       background: #4f46e5;
@@ -514,7 +537,7 @@ If a worker crashes:
 <p>This document details the relational schema, indices, normalization levels, cascading constraints, and performance considerations for the SQLite/Prisma storage layer.</p>
 <h2>Entity Relationship (ER) Diagram</h2>
 <p>The relations are normalized to 3rd Normal Form (3NF) to prevent duplicate data while maintaining referential integrity:</p>
-<pre class="mermaid">erDiagram
+<div class="er-diagram-wrapper"><pre class="mermaid">erDiagram
     Organization ||--o{ User : member
     Organization ||--o{ Project : owns
     Project ||--o{ Queue : contains
@@ -528,7 +551,7 @@ If a worker crashes:
     Job ||--o{ JobExecution : attempts
     Job ||--o{ JobLog : logs
     Job ||--o{ DeadLetterJob : DLQ
-    Job ||--o{ Job : depends</pre>
+    Job ||--o{ Job : depends</pre></div>
 <p>---</p>
 <h2>Detailed Model Schema</h2>
 <h3>1. Core Tenant Configuration</h3>

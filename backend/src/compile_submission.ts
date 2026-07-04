@@ -393,6 +393,29 @@ const htmlTemplate = `<!DOCTYPE html>
       height: auto !important;
     }
 
+    /* ER Diagram expanded wrapper */
+    .er-diagram-wrapper {
+      width: 100%;
+      min-height: 480px;
+      padding: 1.5rem 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      page-break-inside: avoid;
+      break-inside: avoid;
+    }
+
+    .er-diagram-wrapper pre.mermaid {
+      width: 100%;
+      margin: 0;
+    }
+
+    .er-diagram-wrapper pre.mermaid svg {
+      min-height: 440px !important;
+      max-width: 100% !important;
+      height: auto !important;
+    }
+
     /* Print instruction banner */
     .banner {
       background: #4f46e5;
@@ -478,7 +501,7 @@ const htmlTemplate = `<!DOCTYPE html>
   <!-- Section 3: Database Design -->
   <div>
     <h1>3. Relational Database Design</h1>
-    ${simpleMarkdownToHtml(dbDesign)}
+    ${simpleMarkdownToHtml(dbDesign).replace('<pre class="mermaid">', '<div class="er-diagram-wrapper"><pre class="mermaid">').replace('</pre>', '</pre></div>')}
   </div>
 
   <!-- Section 4: API Endpoint Specifications -->
