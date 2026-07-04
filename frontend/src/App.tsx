@@ -1005,14 +1005,101 @@ export default function App() {
                 </div>
               </div>
 
-              <div className="card" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', textAlign: 'center', gap: '1rem' }}>
-                <h3 className="kpi-label">Average Processing Duration</h3>
-                <span className="kpi-value" style={{ fontSize: '3rem', color: 'var(--color-primary)' }}>
-                  {metrics.avgDurationMs ? `${(metrics.avgDurationMs / 1000).toFixed(2)}s` : '0.00s'}
-                </span>
-                <p className="text-secondary" style={{ fontSize: '0.85rem' }}>
-                  Compiled from completed tasks over the last 6 hours. Lower is better.
-                </p>
+              <div className="card" style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+                <div style={{ textAlign: 'center' }}>
+                  <h4 className="text-secondary" style={{ fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.25rem' }}>Average Duration</h4>
+                  <span className="kpi-value" style={{ fontSize: '2.25rem', fontWeight: 700, color: 'var(--color-primary)' }}>
+                    {metrics.avgDurationMs ? `${(metrics.avgDurationMs / 1000).toFixed(2)}s` : '0.00s'}
+                  </span>
+                  <p className="text-secondary" style={{ fontSize: '0.75rem', marginTop: '0.15rem' }}>
+                    Last 6 hours. Lower is better.
+                  </p>
+                </div>
+                
+                <div style={{ borderTop: '1px solid var(--border-color)', paddingTop: '1rem' }}>
+                  <h4 className="text-secondary" style={{ fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.75rem', textAlign: 'center' }}>
+                    Status Distribution
+                  </h4>
+                  
+                  {(() => {
+                    const totalJobs = metrics.statusCounts.COMPLETED + metrics.statusCounts.FAILED + metrics.statusCounts.RUNNING + metrics.statusCounts.QUEUED;
+                    const radius = 35;
+                    const circ = 2 * Math.PI * radius; // ~219.91
+                    
+                    const completedPct = totalJobs > 0 ? (metrics.statusCounts.COMPLETED / totalJobs) : 0;
+                    const failedPct = totalJobs > 0 ? (metrics.statusCounts.FAILED / totalJobs) : 0;
+                    const runningPct = totalJobs > 0 ? (metrics.statusCounts.RUNNING / totalJobs) : 0;
+                    const queuedPct = totalJobs > 0 ? (metrics.statusCounts.QUEUED / totalJobs) : 0;
+                    
+                    const cVal = completedPct * circ;
+                    const fVal = failedPct * circ;
+                    const rVal = runningPct * circ;
+                    const qVal = queuedPct * circ;
+                    
+                    const cOffset = 0;
+                    const fOffset = cVal;
+                    const rOffset = cVal + fVal;
+                    const qOffset = cVal + fVal + rVal;
+                    
+                    return (
+                      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.75rem' }}>
+                        <div style={{ position: 'relative', width: '90px', height: '90px' }}>
+                          <svg width="90" height="90" viewBox="0 0 90 90" style={{ transform: 'rotate(-90deg)' }}>
+                            <circle cx="45" cy="45" r="35" fill="transparent" stroke="rgba(255,255,255,0.05)" strokeWidth="8" />
+                            {cVal > 0 && (
+                              <circle cx="45" cy="45" r="35" fill="transparent" stroke="#10b981" strokeWidth="8"
+                                strokeDasharray={`${cVal} ${circ}`} strokeDashoffset={-cOffset} strokeLinecap="round" />
+                            )}
+                            {fVal > 0 && (
+                              <circle cx="45" cy="45" r="35" fill="transparent" stroke="#ef4444" strokeWidth="8"
+                                strokeDasharray={`${fVal} ${circ}`} strokeDashoffset={-fOffset} strokeLinecap="round" />
+                            )}
+                            {rVal > 0 && (
+                              <circle cx="45" cy="45" r="35" fill="transparent" stroke="#6366f1" strokeWidth="8"
+                                strokeDasharray={`${rVal} ${circ}`} strokeDashoffset={-rOffset} strokeLinecap="round" />
+                            )}
+                            {qVal > 0 && (
+                              <circle cx="45" cy="45" r="35" fill="transparent" stroke="#f59e0b" strokeWidth="8"
+                                strokeDasharray={`${qVal} ${circ}`} strokeDashoffset={-qOffset} strokeLinecap="round" />
+                            )}
+                          </svg>
+                          <div style={{
+                            position: 'absolute',
+                            top: '50%',
+                            left: '50%',
+                            transform: 'translate(-50%, -50%)',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'center',
+                            lineHeight: 1
+                          }}>
+                            <span style={{ fontSize: '0.55rem', color: 'rgba(255,255,255,0.5)', textTransform: 'uppercase' }}>Total</span>
+                            <span style={{ fontSize: '0.95rem', fontWeight: 700, color: '#ffffff' }}>{totalJobs}</span>
+                          </div>
+                        </div>
+                        
+                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.35rem 0.5rem', width: '100%', fontSize: '0.7rem' }}>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+                            <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#10b981', display: 'inline-block' }} />
+                            <span style={{ color: 'rgba(255,255,255,0.7)' }}>Done: {metrics.statusCounts.COMPLETED}</span>
+                          </div>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+                            <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#ef4444', display: 'inline-block' }} />
+                            <span style={{ color: 'rgba(255,255,255,0.7)' }}>Fail: {metrics.statusCounts.FAILED}</span>
+                          </div>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+                            <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#6366f1', display: 'inline-block' }} />
+                            <span style={{ color: 'rgba(255,255,255,0.7)' }}>Run: {metrics.statusCounts.RUNNING}</span>
+                          </div>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+                            <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#f59e0b', display: 'inline-block' }} />
+                            <span style={{ color: 'rgba(255,255,255,0.7)' }}>Queue: {metrics.statusCounts.QUEUED}</span>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })()}
+                </div>
               </div>
             </div>
 
