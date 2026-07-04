@@ -160,8 +160,8 @@ const htmlTemplate = `<!DOCTYPE html>
       --font-title: 'Outfit', sans-serif;
       --font-mono: 'JetBrains Mono', monospace;
       --primary: #4f46e5;
-      --text: #1f2937;
-      --text-light: #4b5563;
+      --text: #000000;
+      --text-light: #111827;
       --border: #e5e7eb;
       --bg-card: #f9fafb;
     }
