@@ -411,8 +411,8 @@ const htmlTemplate = `<!DOCTYPE html>
 
   <!-- Cover Page -->
   <div class="cover-page">
-    <div class="cover-logo">Job Scheduler</div>
-    <div class="cover-title">Job Scheduler</div>
+    <div class="cover-logo">Codity.AI</div>
+    <div class="cover-title">Distributed Job Scheduler</div>
     <div class="cover-subtitle">Technical Assignment Submission Report</div>
     
     <div class="meta-box">
