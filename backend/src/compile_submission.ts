@@ -375,12 +375,20 @@ const htmlTemplate = `<!DOCTYPE html>
     
     .mermaid {
       background: #f9fafb;
-      padding: 1.5rem;
+      padding: 1rem;
       border-radius: 12px;
       border: 1px solid var(--border);
-      display: flex;
-      justify-content: center;
-      margin-bottom: 1.5rem;
+      display: block;
+      text-align: center;
+      margin-bottom: 1rem;
+      overflow: visible;
+      page-break-inside: avoid;
+    }
+    
+    .mermaid svg {
+      max-width: 100% !important;
+      height: auto !important;
+      min-height: 280px;
     }
 
     /* Print instruction banner */
