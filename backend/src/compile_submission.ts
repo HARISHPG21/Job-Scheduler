@@ -25,7 +25,11 @@ function simpleMarkdownToHtml(markdown: string): string {
   // Placeholders for pre blocks to protect code newlines from getting converted
   html = html.replace(/```(mermaid|typescript|javascript|json|bash|css|html|prisma)([\s\S]*?)```/g, (_, lang, code) => {
     const id = `___PLACEHOLDER_${placeholders.length}___`;
-    placeholders.push(`<pre class="${lang}"><code class="language-${lang}">${code.trim()}</code></pre>`);
+    if (lang === 'mermaid') {
+      placeholders.push(`<pre class="mermaid">${code.trim()}</pre>`);
+    } else {
+      placeholders.push(`<pre class="${lang}"><code class="language-${lang}">${code.trim()}</code></pre>`);
+    }
     return id;
   });
 
