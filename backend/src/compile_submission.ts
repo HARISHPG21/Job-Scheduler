@@ -534,36 +534,36 @@ Ran all test suites.
   <div>
     <h1>8. Web Dashboard Interfaces</h1>
     <p>Below are screenshots of the fully functional React/TypeScript monitoring dashboard showing active worker heartbeats, queue priorities, sliding window rate limits, cron triggers, and execution traces:</p>
-    <div style="display: flex; flex-direction: column; gap: 0.35rem; margin-top: 0.35rem;">
+    <div style="display: flex; flex-direction: column; gap: 0.5rem; margin-top: 0.5rem;">
       <div>
         <h3 style="margin-bottom: 0.1rem;">A. Overview Dashboard (Real-time telemetry and task orchestration metrics)</h3>
-        <img src="./docs/screenshots/dashboard.png" alt="Overview Dashboard" style="max-height: 160px; width: 100%; object-fit: contain; border-radius: 12px; border: 1px solid var(--border); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);" />
+        <img src="./docs/screenshots/dashboard.png" alt="Overview Dashboard" style="max-height: 185px; width: 100%; object-fit: contain; border-radius: 12px; border: 1px solid var(--border); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);" />
       </div>
       <div>
         <h3 style="margin-bottom: 0.1rem;">B. Jobs Explorer & Execution Logs (Complete task state list and stdout traces)</h3>
-        <img src="./docs/screenshots/jobs.png" alt="Jobs Explorer" style="max-height: 160px; width: 100%; object-fit: contain; border-radius: 12px; border: 1px solid var(--border); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);" />
+        <img src="./docs/screenshots/jobs.png" alt="Jobs Explorer" style="max-height: 185px; width: 100%; object-fit: contain; border-radius: 12px; border: 1px solid var(--border); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);" />
       </div>
       <div>
         <h3 style="margin-bottom: 0.1rem;">C. Job Queue Management (Configure priorities, concurrency limits, and retry policy backoffs)</h3>
-        <img src="./docs/screenshots/queues.png" alt="Queue Management" style="max-height: 160px; width: 100%; object-fit: contain; border-radius: 12px; border: 1px solid var(--border); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);" />
+        <img src="./docs/screenshots/queues.png" alt="Queue Management" style="max-height: 185px; width: 100%; object-fit: contain; border-radius: 12px; border: 1px solid var(--border); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);" />
       </div>
       <div>
         <h3 style="margin-bottom: 0.1rem;">D. Worker Nodes Monitor (Track CPU/RAM utilization and active task allocations)</h3>
-        <img src="./docs/screenshots/workers.png" alt="Worker Monitor" style="max-height: 160px; width: 100%; object-fit: contain; border-radius: 12px; border: 1px solid var(--border); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);" />
+        <img src="./docs/screenshots/workers.png" alt="Worker Monitor" style="max-height: 185px; width: 100%; object-fit: contain; border-radius: 12px; border: 1px solid var(--border); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);" />
       </div>
       <div>
         <h3 style="margin-bottom: 0.1rem;">E. Cron Recurring Schedules (Automated background execution triggers)</h3>
-        <img src="./docs/screenshots/cron.png" alt="Cron Schedules" style="max-height: 160px; width: 100%; object-fit: contain; border-radius: 12px; border: 1px solid var(--border); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);" />
+        <img src="./docs/screenshots/cron.png" alt="Cron Schedules" style="max-height: 185px; width: 100%; object-fit: contain; border-radius: 12px; border: 1px solid var(--border); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);" />
       </div>
       <div>
         <h3 style="margin-bottom: 0.1rem;">F. Dead Letter Queue (DLQ) (Quarantine execution failures and retry tasks)</h3>
-        <img src="./docs/screenshots/dlq.png" alt="Dead Letter Queue" style="max-height: 160px; width: 100%; object-fit: contain; border-radius: 12px; border: 1px solid var(--border); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);" />
+        <img src="./docs/screenshots/dlq.png" alt="Dead Letter Queue" style="max-height: 185px; width: 100%; object-fit: contain; border-radius: 12px; border: 1px solid var(--border); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);" />
       </div>
       <div>
         <h3 style="margin-bottom: 0.1rem;">G. Portal Login Screen (Secure access authentication gate)</h3>
-        <img src="./docs/screenshots/login.png" alt="Portal Login" style="max-height: 160px; width: 100%; object-fit: contain; border-radius: 12px; border: 1px solid var(--border); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);" />
+        <img src="./docs/screenshots/login.png" alt="Portal Login" style="max-height: 185px; width: 100%; object-fit: contain; border-radius: 12px; border: 1px solid var(--border); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);" />
       </div>
-    </div> </div>
+    </div>
     </div>
   </div>
 
