@@ -8,20 +8,20 @@ The relations are normalized to 3rd Normal Form (3NF) to prevent duplicate data 
 
 ```mermaid
 erDiagram
-    ORGANIZATION ||--o{ USER : "has members"
-    ORGANIZATION ||--o{ PROJECT : "owns"
-    PROJECT ||--o{ QUEUE : "contains"
-    RETRY_POLICY ||--o{ QUEUE : "governs delays"
-    QUEUE ||--o{ JOB : "buffers"
-    QUEUE ||--o{ SCHEDULED_JOB : "defines interval"
-    QUEUE ||--o{ DEAD_LETTER_JOB : "quarantines"
-    WORKER ||--o{ JOB : "executes"
-    WORKER ||--o{ JOB_EXECUTION : "runs"
-    WORKER ||--o{ WORKER_HEARTBEAT : "reports metrics"
-    JOB ||--o{ JOB_EXECUTION : "logs attempts"
-    JOB ||--o{ JOB_LOG : "streams stdout"
-    JOB ||--o{ DEAD_LETTER_JOB : "quarantines"
-    JOB ||--o{ JOB : "depends on (parent/child)"
+    Organization ||--o{ User : "has members"
+    Organization ||--o{ Project : "owns"
+    Project ||--o{ Queue : "contains"
+    RetryPolicy ||--o{ Queue : "governs delays"
+    Queue ||--o{ Job : "buffers"
+    Queue ||--o{ ScheduledJob : "defines interval"
+    Queue ||--o{ DeadLetterJob : "quarantines"
+    Worker ||--o{ Job : "executes"
+    Worker ||--o{ JobExecution : "runs"
+    Worker ||--o{ WorkerHeartbeat : "reports metrics"
+    Job ||--o{ JobExecution : "logs attempts"
+    Job ||--o{ JobLog : "streams stdout"
+    Job ||--o{ DeadLetterJob : "quarantines"
+    Job ||--o{ Job : "depends on"
 ```
 
 ---
