@@ -450,10 +450,7 @@ const htmlTemplate = `<!DOCTYPE html>
         <div class="meta-label">Role Applied</div>
         <div class="meta-value">Software Engineer Intern</div>
       </div>
-      <div>
-        <div class="meta-label">Submission Date</div>
-        <div class="meta-value">July 4, 2026</div>
-      </div>
+
       <div style="grid-column: span 2; margin-top: 0.5rem;">
         <div class="meta-label">GitHub Repository</div>
         <div class="meta-value">
