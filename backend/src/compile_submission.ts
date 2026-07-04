@@ -537,6 +537,14 @@ Ran all test suites.
         <h3 style="margin-bottom: 0.5rem;">E. Cron Recurring Schedules (Automated background execution triggers)</h3>
         <img src="./docs/screenshots/cron.png" alt="Cron Schedules" style="width: 100%; border-radius: 12px; border: 1px solid var(--border); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);" />
       </div>
+      <div class="page-break">
+        <h3 style="margin-bottom: 0.5rem;">F. Dead Letter Queue (DLQ) (Quarantine execution failures and retry tasks)</h3>
+        <img src="./docs/screenshots/dlq.png" alt="Dead Letter Queue" style="width: 100%; border-radius: 12px; border: 1px solid var(--border); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);" />
+      </div>
+      <div class="page-break">
+        <h3 style="margin-bottom: 0.5rem;">G. Portal Login Screen (Secure access authentication gate)</h3>
+        <img src="./docs/screenshots/login.png" alt="Portal Login" style="width: 100%; border-radius: 12px; border: 1px solid var(--border); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);" />
+      </div>
     </div>
   </div>
 
