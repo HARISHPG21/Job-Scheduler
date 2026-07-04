@@ -187,7 +187,8 @@ const htmlTemplate = `<!DOCTYPE html>
       body {
         padding: 0;
         max-width: 100%;
-        font-size: 13px;
+        font-size: 11px;
+        line-height: 1.15;
       }
       .page-break {
         page-break-before: always;
@@ -196,21 +197,21 @@ const htmlTemplate = `<!DOCTYPE html>
         display: none !important;
       }
       pre {
-        padding: 0.5rem;
-        font-size: 10px !important;
-        margin-bottom: 0.5rem;
+        padding: 0.35rem;
+        font-size: 9px !important;
+        margin-bottom: 0.35rem;
       }
       table {
-        font-size: 11px;
-        margin-bottom: 0.75rem;
+        font-size: 9px;
+        margin-bottom: 0.5rem;
       }
       p, li {
-        font-size: 12px;
-        margin-bottom: 0.2rem;
+        font-size: 11px;
+        margin-bottom: 0.15rem;
       }
-      h1 { font-size: 1.8rem; }
-      h2 { font-size: 1.3rem; margin-top: 1rem; }
-      h3 { font-size: 1.1rem; }
+      h1 { font-size: 1.5rem; }
+      h2 { font-size: 1.1rem; margin-top: 0.75rem; }
+      h3 { font-size: 0.95rem; }
     }
 
     h1, h2, h3, h4 {
@@ -373,7 +374,11 @@ const htmlTemplate = `<!DOCTYPE html>
       color: var(--primary);
     }
     
-    .mermaid {
+    pre.mermaid {
+      background: transparent !important;
+      border: none !important;
+      padding: 0 !important;
+      box-shadow: none !important;
       display: block;
       text-align: center;
       margin-bottom: 1.5rem;
@@ -382,7 +387,7 @@ const htmlTemplate = `<!DOCTYPE html>
       break-inside: avoid;
     }
     
-    .mermaid svg {
+    pre.mermaid svg {
       max-width: 100% !important;
       height: auto !important;
     }
@@ -533,34 +538,34 @@ Ran all test suites.
     <h1>8. Web Dashboard Interfaces</h1>
     <p>Below are screenshots of the fully functional React/TypeScript monitoring dashboard showing active worker heartbeats, queue priorities, sliding window rate limits, cron triggers, and execution traces:</p>
     
-    <div style="display: flex; flex-direction: column; gap: 1rem; margin-top: 1rem;">
+    <div style="display: flex; flex-direction: column; gap: 0.5rem; margin-top: 0.5rem;">
       <div>
-        <h3 style="margin-bottom: 0.25rem;">A. Overview Dashboard (Real-time telemetry and task orchestration metrics)</h3>
-        <img src="./docs/screenshots/dashboard.png" alt="Overview Dashboard" style="max-height: 250px; width: 100%; object-fit: contain; border-radius: 12px; border: 1px solid var(--border); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);" />
+        <h3 style="margin-bottom: 0.15rem;">A. Overview Dashboard (Real-time telemetry and task orchestration metrics)</h3>
+        <img src="./docs/screenshots/dashboard.png" alt="Overview Dashboard" style="max-height: 200px; width: 100%; object-fit: contain; border-radius: 12px; border: 1px solid var(--border); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);" />
       </div>
       <div>
-        <h3 style="margin-bottom: 0.25rem;">B. Jobs Explorer & Execution Logs (Complete task state list and stdout traces)</h3>
-        <img src="./docs/screenshots/jobs.png" alt="Jobs Explorer" style="max-height: 250px; width: 100%; object-fit: contain; border-radius: 12px; border: 1px solid var(--border); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);" />
+        <h3 style="margin-bottom: 0.15rem;">B. Jobs Explorer & Execution Logs (Complete task state list and stdout traces)</h3>
+        <img src="./docs/screenshots/jobs.png" alt="Jobs Explorer" style="max-height: 200px; width: 100%; object-fit: contain; border-radius: 12px; border: 1px solid var(--border); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);" />
+      </div>
+      <div>
+        <h3 style="margin-bottom: 0.15rem;">C. Job Queue Management (Configure priorities, concurrency limits, and retry policy backoffs)</h3>
+        <img src="./docs/screenshots/queues.png" alt="Queue Management" style="max-height: 200px; width: 100%; object-fit: contain; border-radius: 12px; border: 1px solid var(--border); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);" />
       </div>
       <div class="page-break">
-        <h3 style="margin-bottom: 0.25rem;">C. Job Queue Management (Configure priorities, concurrency limits, and retry policy backoffs)</h3>
-        <img src="./docs/screenshots/queues.png" alt="Queue Management" style="max-height: 250px; width: 100%; object-fit: contain; border-radius: 12px; border: 1px solid var(--border); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);" />
+        <h3 style="margin-bottom: 0.15rem;">D. Worker Nodes Monitor (Track CPU/RAM utilization and active task allocations)</h3>
+        <img src="./docs/screenshots/workers.png" alt="Worker Monitor" style="max-height: 200px; width: 100%; object-fit: contain; border-radius: 12px; border: 1px solid var(--border); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);" />
       </div>
       <div>
-        <h3 style="margin-bottom: 0.25rem;">D. Worker Nodes Monitor (Track CPU/RAM utilization and active task allocations)</h3>
-        <img src="./docs/screenshots/workers.png" alt="Worker Monitor" style="max-height: 250px; width: 100%; object-fit: contain; border-radius: 12px; border: 1px solid var(--border); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);" />
-      </div>
-      <div class="page-break">
-        <h3 style="margin-bottom: 0.25rem;">E. Cron Recurring Schedules (Automated background execution triggers)</h3>
-        <img src="./docs/screenshots/cron.png" alt="Cron Schedules" style="max-height: 250px; width: 100%; object-fit: contain; border-radius: 12px; border: 1px solid var(--border); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);" />
+        <h3 style="margin-bottom: 0.15rem;">E. Cron Recurring Schedules (Automated background execution triggers)</h3>
+        <img src="./docs/screenshots/cron.png" alt="Cron Schedules" style="max-height: 200px; width: 100%; object-fit: contain; border-radius: 12px; border: 1px solid var(--border); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);" />
       </div>
       <div>
-        <h3 style="margin-bottom: 0.25rem;">F. Dead Letter Queue (DLQ) (Quarantine execution failures and retry tasks)</h3>
-        <img src="./docs/screenshots/dlq.png" alt="Dead Letter Queue" style="max-height: 250px; width: 100%; object-fit: contain; border-radius: 12px; border: 1px solid var(--border); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);" />
+        <h3 style="margin-bottom: 0.15rem;">F. Dead Letter Queue (DLQ) (Quarantine execution failures and retry tasks)</h3>
+        <img src="./docs/screenshots/dlq.png" alt="Dead Letter Queue" style="max-height: 200px; width: 100%; object-fit: contain; border-radius: 12px; border: 1px solid var(--border); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);" />
       </div>
       <div class="page-break">
-        <h3 style="margin-bottom: 0.25rem;">G. Portal Login Screen (Secure access authentication gate)</h3>
-        <img src="./docs/screenshots/login.png" alt="Portal Login" style="max-height: 250px; width: 100%; object-fit: contain; border-radius: 12px; border: 1px solid var(--border); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);" />
+        <h3 style="margin-bottom: 0.15rem;">G. Portal Login Screen (Secure access authentication gate)</h3>
+        <img src="./docs/screenshots/login.png" alt="Portal Login" style="max-height: 200px; width: 100%; object-fit: contain; border-radius: 12px; border: 1px solid var(--border); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);" />
       </div>
     </div>
   </div>
