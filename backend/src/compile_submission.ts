@@ -12,8 +12,8 @@ function readDocFile(relPath: string): string {
   return `Warning: ${relPath} not found.`;
 }
 
-// Simple markdown inline compiler for headers, lists, code, and tables
 function simpleMarkdownToHtml(markdown: string): string {
+  const placeholders: string[] = [];
   let html = markdown;
 
   // Escape HTML entities to prevent script injection (except code tags we insert)
@@ -22,35 +22,17 @@ function simpleMarkdownToHtml(markdown: string): string {
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;');
 
-  // Restore Mermaid code blocks
-  html = html.replace(/```mermaid([\s\S]*?)```/g, (_, code) => {
-    return `<pre class="mermaid">${code.trim()}</pre>`;
+  // Placeholders for pre blocks to protect code newlines from getting converted
+  html = html.replace(/```(mermaid|typescript|javascript|json|bash|css|html|prisma)([\s\S]*?)```/g, (_, lang, code) => {
+    const id = `___PLACEHOLDER_${placeholders.length}___`;
+    placeholders.push(`<pre class="${lang}"><code class="language-${lang}">${code.trim()}</code></pre>`);
+    return id;
   });
 
-  // Restore Code blocks
-  html = html.replace(/```typescript([\s\S]*?)```/g, (_, code) => {
-    return `<pre><code class="language-typescript">${code.trim()}</code></pre>`;
-  });
-  html = html.replace(/```javascript([\s\S]*?)```/g, (_, code) => {
-    return `<pre><code class="language-javascript">${code.trim()}</code></pre>`;
-  });
-  html = html.replace(/```json([\s\S]*?)```/g, (_, code) => {
-    return `<pre><code class="language-json">${code.trim()}</code></pre>`;
-  });
-  html = html.replace(/```bash([\s\S]*?)```/g, (_, code) => {
-    return `<pre><code class="language-bash">${code.trim()}</code></pre>`;
-  });
-  html = html.replace(/```css([\s\S]*?)```/g, (_, code) => {
-    return `<pre><code class="language-css">${code.trim()}</code></pre>`;
-  });
-  html = html.replace(/```html([\s\S]*?)```/g, (_, code) => {
-    return `<pre><code class="language-html">${code.trim()}</code></pre>`;
-  });
-  html = html.replace(/```prisma([\s\S]*?)```/g, (_, code) => {
-    return `<pre><code class="language-prisma">${code.trim()}</code></pre>`;
-  });
   html = html.replace(/```([\s\S]*?)```/g, (_, code) => {
-    return `<pre><code>${code.trim()}</code></pre>`;
+    const id = `___PLACEHOLDER_${placeholders.length}___`;
+    placeholders.push(`<pre><code>${code.trim()}</code></pre>`);
+    return id;
   });
 
   // Inline code `code`
@@ -72,11 +54,21 @@ function simpleMarkdownToHtml(markdown: string): string {
   // Clean double wrapping
   html = html.replace(/<\/ul>\s*<ul>/g, '');
 
-  // Line breaks
-  html = html.replace(/\n/g, '<br>');
+  // Convert double newlines to paragraphs, and join single text newlines with space
+  const paragraphs = html.split('\n\n').map(p => {
+    const trimmed = p.trim();
+    if (!trimmed) return '';
+    if (trimmed.startsWith('<h') || trimmed.startsWith('<ul') || trimmed.startsWith('<li') || trimmed.startsWith('___PLACEHOLDER_')) {
+      return trimmed;
+    }
+    return `<p>${trimmed.replace(/\n/g, ' ')}</p>`;
+  });
+  html = paragraphs.filter(p => p !== '').join('\n');
 
-  // Clean empty tags
-  html = html.replace(/<br><br>/g, '<br>');
+  // Restore placeholders
+  placeholders.forEach((val, index) => {
+    html = html.replace(`___PLACEHOLDER_${index}___`, val);
+  });
 
   return html;
 }
@@ -191,6 +183,7 @@ const htmlTemplate = `<!DOCTYPE html>
       body {
         padding: 0;
         max-width: 100%;
+        font-size: 13px;
       }
       .page-break {
         page-break-before: always;
@@ -198,6 +191,22 @@ const htmlTemplate = `<!DOCTYPE html>
       .no-print {
         display: none !important;
       }
+      pre {
+        padding: 0.5rem;
+        font-size: 10px !important;
+        margin-bottom: 0.5rem;
+      }
+      table {
+        font-size: 11px;
+        margin-bottom: 0.75rem;
+      }
+      p, li {
+        font-size: 12px;
+        margin-bottom: 0.2rem;
+      }
+      h1 { font-size: 1.8rem; }
+      h2 { font-size: 1.3rem; margin-top: 1rem; }
+      h3 { font-size: 1.1rem; }
     }
 
     h1, h2, h3, h4 {
@@ -516,34 +525,34 @@ Ran all test suites.
     <h1>8. Web Dashboard Interfaces</h1>
     <p>Below are screenshots of the fully functional React/TypeScript monitoring dashboard showing active worker heartbeats, queue priorities, sliding window rate limits, cron triggers, and execution traces:</p>
     
-    <div style="display: flex; flex-direction: column; gap: 2rem; margin-top: 2rem;">
+    <div style="display: flex; flex-direction: column; gap: 1rem; margin-top: 1rem;">
       <div>
-        <h3 style="margin-bottom: 0.5rem;">A. Overview Dashboard (Real-time telemetry and task orchestration metrics)</h3>
-        <img src="./docs/screenshots/dashboard.png" alt="Overview Dashboard" style="width: 100%; border-radius: 12px; border: 1px solid var(--border); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);" />
+        <h3 style="margin-bottom: 0.25rem;">A. Overview Dashboard (Real-time telemetry and task orchestration metrics)</h3>
+        <img src="./docs/screenshots/dashboard.png" alt="Overview Dashboard" style="max-height: 250px; width: 100%; object-fit: contain; border-radius: 12px; border: 1px solid var(--border); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);" />
+      </div>
+      <div>
+        <h3 style="margin-bottom: 0.25rem;">B. Jobs Explorer & Execution Logs (Complete task state list and stdout traces)</h3>
+        <img src="./docs/screenshots/jobs.png" alt="Jobs Explorer" style="max-height: 250px; width: 100%; object-fit: contain; border-radius: 12px; border: 1px solid var(--border); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);" />
       </div>
       <div class="page-break">
-        <h3 style="margin-bottom: 0.5rem;">B. Jobs Explorer & Execution Logs (Complete task state list and stdout traces)</h3>
-        <img src="./docs/screenshots/jobs.png" alt="Jobs Explorer" style="width: 100%; border-radius: 12px; border: 1px solid var(--border); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);" />
+        <h3 style="margin-bottom: 0.25rem;">C. Job Queue Management (Configure priorities, concurrency limits, and retry policy backoffs)</h3>
+        <img src="./docs/screenshots/queues.png" alt="Queue Management" style="max-height: 250px; width: 100%; object-fit: contain; border-radius: 12px; border: 1px solid var(--border); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);" />
+      </div>
+      <div>
+        <h3 style="margin-bottom: 0.25rem;">D. Worker Nodes Monitor (Track CPU/RAM utilization and active task allocations)</h3>
+        <img src="./docs/screenshots/workers.png" alt="Worker Monitor" style="max-height: 250px; width: 100%; object-fit: contain; border-radius: 12px; border: 1px solid var(--border); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);" />
       </div>
       <div class="page-break">
-        <h3 style="margin-bottom: 0.5rem;">C. Job Queue Management (Configure priorities, concurrency limits, and retry policy backoffs)</h3>
-        <img src="./docs/screenshots/queues.png" alt="Queue Management" style="width: 100%; border-radius: 12px; border: 1px solid var(--border); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);" />
+        <h3 style="margin-bottom: 0.25rem;">E. Cron Recurring Schedules (Automated background execution triggers)</h3>
+        <img src="./docs/screenshots/cron.png" alt="Cron Schedules" style="max-height: 250px; width: 100%; object-fit: contain; border-radius: 12px; border: 1px solid var(--border); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);" />
+      </div>
+      <div>
+        <h3 style="margin-bottom: 0.25rem;">F. Dead Letter Queue (DLQ) (Quarantine execution failures and retry tasks)</h3>
+        <img src="./docs/screenshots/dlq.png" alt="Dead Letter Queue" style="max-height: 250px; width: 100%; object-fit: contain; border-radius: 12px; border: 1px solid var(--border); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);" />
       </div>
       <div class="page-break">
-        <h3 style="margin-bottom: 0.5rem;">D. Worker Nodes Monitor (Track CPU/RAM utilization and active task allocations)</h3>
-        <img src="./docs/screenshots/workers.png" alt="Worker Monitor" style="width: 100%; border-radius: 12px; border: 1px solid var(--border); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);" />
-      </div>
-      <div class="page-break">
-        <h3 style="margin-bottom: 0.5rem;">E. Cron Recurring Schedules (Automated background execution triggers)</h3>
-        <img src="./docs/screenshots/cron.png" alt="Cron Schedules" style="width: 100%; border-radius: 12px; border: 1px solid var(--border); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);" />
-      </div>
-      <div class="page-break">
-        <h3 style="margin-bottom: 0.5rem;">F. Dead Letter Queue (DLQ) (Quarantine execution failures and retry tasks)</h3>
-        <img src="./docs/screenshots/dlq.png" alt="Dead Letter Queue" style="width: 100%; border-radius: 12px; border: 1px solid var(--border); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);" />
-      </div>
-      <div class="page-break">
-        <h3 style="margin-bottom: 0.5rem;">G. Portal Login Screen (Secure access authentication gate)</h3>
-        <img src="./docs/screenshots/login.png" alt="Portal Login" style="width: 100%; border-radius: 12px; border: 1px solid var(--border); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);" />
+        <h3 style="margin-bottom: 0.25rem;">G. Portal Login Screen (Secure access authentication gate)</h3>
+        <img src="./docs/screenshots/login.png" alt="Portal Login" style="max-height: 250px; width: 100%; object-fit: contain; border-radius: 12px; border: 1px solid var(--border); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);" />
       </div>
     </div>
   </div>
