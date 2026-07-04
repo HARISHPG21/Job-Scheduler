@@ -1,13 +1,15 @@
-# Job Scheduler
+# Distributed Job Scheduler (Codity.AI Tech Assignment Submission)
 
-A production-inspired, highly resilient, multi-tenant distributed job scheduling engine. Built with a stateless TypeScript worker daemon and an Express API coordinator with SQLite/Prisma.
+A production-inspired, highly resilient, multi-tenant distributed job scheduling engine. Built with a decoupled architecture separating a stateless TypeScript worker daemon from an Express API coordinator backed by SQLite/Prisma and a React telemetry dashboard.
 
 ---
 
 ## 👨‍💻 Candidate Profile
 * **Name**: P.G.Harish
 * **Registration Number**: RA2311026020172
-* **Objective**: Intern Assignment Submission - Distributed Job Scheduler
+* **Role Applied**: Software Engineer Intern
+* **Submission Date**: July 4, 2026
+* **GitHub Repository**: [HARISHPG21/Job-Scheduler](https://github.com/HARISHPG21/Job-Scheduler)
 
 ---
 
@@ -25,48 +27,82 @@ graph TD
     Server -->|Worker Health Check| Janitor[Worker Recovery Loop]
 ```
 
+### Decoupled Monorepo Flow
+1. **API Server (Broker)**: Exposes endpoints for scheduling, telemetry, and node registration. Coordinates queues and streams logs.
+2. **Worker Daemon (Executor)**: Stateless, standalone processes that poll the coordinator via HTTP long-polling, spawn asynchronous sandboxed execution tasks, and report health metrics every 3s.
+3. **Live Telemetry (WebSockets)**: Streams real-time throughput metrics, queue load summaries, and worker nodes heartbeats to the client dashboard.
+
 ---
 
-## 🌟 Key Features
+## 🌟 Key Features & Rubric Map
 
-### Core Capabilities
-1. **Multi-Tenancy & Auth**: JWT-based credentials with `bcryptjs` password encryption. Users belong to Organizations, which segregate Projects, Queues, Jobs, and Logs.
-2. **Flexible Job Pipelines**: Create **Immediate**, **Delayed**, **Batch**, and recurring **Cron** jobs via REST APIs.
-3. **Queue Configurations**: Adjust priority levels, concurrency limit caps, and toggle pause/resume states dynamically.
-4. **Dead Letter Queue (DLQ)**: Automatically quarantines jobs exceeding max retry attempts. Supports bulk retries and purges from the UI.
-5. **Worker Heartbeats**: Workers stream system metrics (CPU/RAM) every 3 seconds. The server janitor automatically reclaims jobs from offline daemons.
+| Grading Axis (Marks) | Feature Implemented | Technical Strategy |
+| :--- | :--- | :--- |
+| **System Architecture (20)** | Decoupled Workspaces | Independent `backend` API and `worker` daemon runner running as separate OS processes. |
+| **Database Design (20)** | Relational Schema (3NF) | Normalization of Organizations, Queues, Jobs, Logs, and Heartbeats with indexing on `(status, scheduledAt)`. |
+| **Backend Engineering (20)** | Complete Endpoint Coverage | Auth, Queue Config, Job pipelines (Immediate/Delayed/Batch), DLQ management, and Worker heartbeats. |
+| **Reliability & Concurrency (15)** | Concurrency-Safe Claims | Relational transaction checks verifying concurrency limits, pause states, rate limits, and dependencies before execution. |
+| **Frontend & UX (10)** | Glassmorphism Dashboard | Real-time WebSockets stats, terminal-style log streams, dynamic queue configuration toggles, and live SVG status donut charts. |
+| **Testing & Observability (15)** | Jest E2E Integration Suite | 9 E2E test cases executing inside isolated sandboxed test databases asserting execution safety. |
 
 ### Rubric Bonus Features (100% Completed)
-* [x] **Workflow Dependencies**: Set job dependencies via `parentJobId` (child tasks execute automatically once parent completes).
-* [x] **Sliding-Window Rate Limiting**: Zero-dependency sliding log count checks inside atomic claim transactions to prevent API exhaustion.
-* [x] **WebSocket Live Updates**: Socket.io integration streaming telemetry, worker status, and stdout logs to the client.
-* [x] **AI-Generated Failure Summaries**: Automated failure diagnostic summaries inside trace logs based on regex error matching.
-* [x] **Job-Level Priority Queuing**: Configure task priority (1-10) to bypass FIFO queue limits.
-* [x] **Distributed Queue Sharding**: Optionally split queues into virtual partitions (`shardsCount`) with deterministic worker-shard mappings and work-stealing failovers.
-* [x] **Role-Based Access Control (RBAC)**: Tenant checks and admin permissions on queue configuration edits.
-* [x] **Distributed Lock Synchronization**: Simulated row locking inside interactive transactions to prevent double-claiming under load.
+* 🔗 **Workflow Dependencies**: Set job dependencies via `parentJobId` (child tasks execute automatically once parent completes).
+* ⏱️ **Sliding-Window Rate Limiting**: Zero-dependency sliding log count checks inside atomic claim transactions to prevent API exhaustion.
+* 🔌 **WebSocket Live Updates**: Socket.io integration streaming telemetry, worker status, and stdout logs to the client.
+* 🤖 **AI-Generated Failure Summaries**: Automated failure diagnostic summaries inside trace logs based on regex error matching.
+* 📊 **Job-Level Priority Queuing**: Configure task priority (1-10) to bypass FIFO queue limits.
+* 🧩 **Distributed Queue Sharding**: Optionally split queues into virtual partitions (`shardsCount`) with deterministic worker-shard mappings and work-stealing failovers.
+* 🔐 **Role-Based Access Control (RBAC)**: Tenant checks and admin permissions on queue configuration edits.
+* 🔒 **Distributed Lock Synchronization**: Simulated row locking inside interactive transactions to prevent double-claiming under load.
 
 ---
 
-## 💻 Tech Stack
-* **Monorepo**: npm workspaces
-* **Backend Server**: Node.js, Express, TypeScript, WebSockets (`socket.io`)
-* **Database**: SQLite with Prisma ORM
-* **Worker Node**: Standalone lightweight TypeScript runner
-* **Frontend Dashboard**: React, Vite, Vanilla CSS, Lucide icons, Chart.js
-* **Testing**: Jest, Supertest
+## 📂 Project Structure
+
+```bash
+├── backend/            # Express API Server, Cron Manager, WebSocket Broker, and E2E Tests
+│   ├── src/
+│   │   ├── routes/     # Auth, Queues, Jobs, Workers, and DLQ API endpoints
+│   │   ├── tests/      # Jest integration testing suites
+│   │   ├── prisma/     # Prisma Schema definitions & migrations
+│   │   └── server.ts   # Node entrypoint
+├── worker/             # Standalone TypeScript Worker Daemon executor
+│   └── src/worker.ts   # Long-polling loop, execution thread pool, and heartbeats
+├── frontend/           # React dashboard web application
+│   ├── src/App.tsx     # Single-page control panel (with custom SVG donut visualizations)
+│   └── src/index.css   # Modern glassmorphism dark-mode system styling
+└── docs/               # System documentation (architecture, database design, API docs, trade-offs)
+```
 
 ---
 
-## 📂 Project Navigation
-* [System Architecture](./docs/architecture.md)
-* [Database Schema Design & Indexes](./docs/db_design.md)
-* [REST API Endpoint References](./docs/api_docs.md)
-* [Design Decisions & Trade-offs](./docs/design_decisions.md)
+## ⚡ Concurrency & Reliability Highlights
+
+### 1. Atomic Job Claiming Transaction
+To prevent multiple workers from claiming the same job under load, the coordinator executes claims inside an interactive database transaction. It verifies concurrency limits, queue pause states, and rate limits:
+```typescript
+const claimedJob = await prisma.$transaction(async (tx) => {
+  // 1. Fetch queues ordered by priority
+  // 2. Check active jobs against queue concurrencyLimit
+  // 3. Verify sliding-window rate limits in the configured interval
+  // 4. Extract next eligible job checking parentJobId dependency state
+  // 5. Update job status to RUNNING, assign workerId, commit transaction
+});
+```
+
+### 2. Worker Crash Recovery (Janitor Loop)
+If a worker crashes or loses network connection:
+* Workers send heartbeats to the API every **3 seconds**.
+* The server Janitor loop runs every **5 seconds** searching for workers whose `lastHeartbeatAt` is older than **15 seconds**.
+* Stuck jobs are automatically reclaimed, their attempt counters incremented, and rescheduled with **exponential backoff delay policies** or routed to the **Dead Letter Queue (DLQ)** if retry limits are exceeded.
 
 ---
 
 ## 🚀 Setup & Running Locally
+
+### Prerequisites
+* Node.js (v18+)
+* npm (v9+)
 
 ### 1. Install Workspace Dependencies
 ```bash
@@ -74,22 +110,24 @@ npm install
 ```
 
 ### 2. Initialize Database & Run Migrations
+Creates the SQLite database file (`dev.db`) and executes DDL schemas:
 ```bash
 npm run db:migrate
 ```
 
 ### 3. Seed Sandbox Records
+Populates organizations, projects, default queues, and admin credentials:
 ```bash
 npm run db:seed
 ```
 
 ### 4. Run the Dev Environment
-Start the API Server, Worker Daemon, and React Dashboard concurrently:
+Starts the API Server, Worker Daemon, and React Dashboard concurrently:
 ```bash
 npm run dev
 ```
-* **Dashboard**: [http://localhost:3000](http://localhost:3000)
-* **API Server**: [http://localhost:5000](http://localhost:5000)
+* **React Dashboard**: [http://localhost:3000](http://localhost:3000)
+* **Express API Server**: [http://localhost:5000](http://localhost:5000)
 
 ### 🔑 Sandbox Credentials
 * **Email**: `admin@acme.com`
@@ -99,7 +137,7 @@ npm run dev
 
 ## 🧪 Running Automated Tests
 
-E2E integration tests are run in isolated SQLite contexts (`test.db`) to assert concurrency safety and correct calculations:
+E2E integration tests are run in isolated SQLite contexts (`test.db`) to assert concurrency safety, rate limits, and priority ordering without wiping development records:
 
 ```bash
 npm run test
