@@ -396,11 +396,9 @@ const htmlTemplate = `<!DOCTYPE html>
     /* ER Diagram expanded wrapper */
     .er-diagram-wrapper {
       width: 100%;
-      min-height: 480px;
-      padding: 1.5rem 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      padding: 0.5rem 0;
+      display: block;
+      text-align: center;
       page-break-inside: avoid;
       break-inside: avoid;
     }
@@ -411,9 +409,9 @@ const htmlTemplate = `<!DOCTYPE html>
     }
 
     .er-diagram-wrapper pre.mermaid svg {
-      min-height: 440px !important;
       max-width: 100% !important;
       height: auto !important;
+      width: 100% !important;
     }
 
     /* Print instruction banner */
