@@ -187,8 +187,8 @@ const htmlTemplate = `<!DOCTYPE html>
       body {
         padding: 0;
         max-width: 100%;
-        font-size: 10px;
-        line-height: 1.1;
+        font-size: 9.5px;
+        line-height: 1.05;
       }
       .page-break {
         page-break-before: always;
@@ -197,21 +197,21 @@ const htmlTemplate = `<!DOCTYPE html>
         display: none !important;
       }
       pre {
-        padding: 0.2rem;
-        font-size: 7.5px !important;
-        margin-bottom: 0.2rem;
+        padding: 0.15rem;
+        font-size: 7px !important;
+        margin-bottom: 0.15rem;
       }
       table {
-        font-size: 8px;
-        margin-bottom: 0.3rem;
+        font-size: 7.5px;
+        margin-bottom: 0.25rem;
       }
       p, li {
-        font-size: 10px;
-        margin-bottom: 0.08rem;
+        font-size: 9.5px;
+        margin-bottom: 0.05rem;
       }
-      h1 { font-size: 1.35rem; margin-top: 0.4rem; margin-bottom: 0.2rem; }
-      h2 { font-size: 1.0rem; margin-top: 0.4rem; }
-      h3 { font-size: 0.85rem; }
+      h1 { font-size: 1.2rem; margin-top: 0.3rem; margin-bottom: 0.15rem; }
+      h2 { font-size: 0.95rem; margin-top: 0.3rem; }
+      h3 { font-size: 0.8rem; }
     }
 
     h1, h2, h3, h4 {
@@ -481,7 +481,7 @@ const htmlTemplate = `<!DOCTYPE html>
   </div>
 
   <!-- Section 4: API Endpoint Specifications -->
-  <div class="page-break">
+  <div>
     <h1>4. API Documentation</h1>
     ${simpleMarkdownToHtml(apiDocs)}
   </div>
@@ -531,7 +531,7 @@ Time:        15.218 s
 Ran all test suites.
     </code></pre>
   <!-- Section 8: Web Dashboard Screenshots -->
-  <div class="page-break">
+  <div>
     <h1>8. Web Dashboard Interfaces</h1>
     <p>Below are screenshots of the fully functional React/TypeScript monitoring dashboard showing active worker heartbeats, queue priorities, sliding window rate limits, cron triggers, and execution traces:</p>
     <div style="display: flex; flex-direction: column; gap: 0.35rem; margin-top: 0.35rem;">
