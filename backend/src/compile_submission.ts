@@ -551,7 +551,7 @@ Ran all test suites.
         <h3 style="margin-bottom: 0.1rem;">D. Worker Nodes Monitor (Track CPU/RAM utilization and active task allocations)</h3>
         <img src="./docs/screenshots/workers.png" alt="Worker Monitor" style="max-height: 160px; width: 100%; object-fit: contain; border-radius: 12px; border: 1px solid var(--border); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);" />
       </div>
-      <div class="page-break">
+      <div>
         <h3 style="margin-bottom: 0.1rem;">E. Cron Recurring Schedules (Automated background execution triggers)</h3>
         <img src="./docs/screenshots/cron.png" alt="Cron Schedules" style="max-height: 160px; width: 100%; object-fit: contain; border-radius: 12px; border: 1px solid var(--border); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);" />
       </div>
