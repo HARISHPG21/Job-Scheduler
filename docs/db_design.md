@@ -8,20 +8,20 @@ The relations are normalized to 3rd Normal Form (3NF) to prevent duplicate data 
 
 ```mermaid
 erDiagram
-    Organization ||--o{ User : "has members"
-    Organization ||--o{ Project : "owns"
-    Project ||--o{ Queue : "contains"
-    RetryPolicy ||--o{ Queue : "governs delays"
-    Queue ||--o{ Job : "buffers"
-    Queue ||--o{ ScheduledJob : "defines interval"
-    Queue ||--o{ DeadLetterJob : "quarantines"
-    Worker ||--o{ Job : "executes"
-    Worker ||--o{ JobExecution : "runs"
-    Worker ||--o{ WorkerHeartbeat : "reports metrics"
-    Job ||--o{ JobExecution : "logs attempts"
-    Job ||--o{ JobLog : "streams stdout"
-    Job ||--o{ DeadLetterJob : "quarantines"
-    Job ||--o{ Job : "depends on"
+    Organization ||--o{ User : member
+    Organization ||--o{ Project : owns
+    Project ||--o{ Queue : contains
+    RetryPolicy ||--o{ Queue : governs
+    Queue ||--o{ Job : buffers
+    Queue ||--o{ ScheduledJob : schedules
+    Queue ||--o{ DeadLetterJob : DLQ
+    Worker ||--o{ Job : executes
+    Worker ||--o{ JobExecution : runs
+    Worker ||--o{ WorkerHeartbeat : heartbeats
+    Job ||--o{ JobExecution : attempts
+    Job ||--o{ JobLog : logs
+    Job ||--o{ DeadLetterJob : DLQ
+    Job ||--o{ Job : depends
 ```
 
 ---
