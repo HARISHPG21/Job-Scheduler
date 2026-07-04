@@ -246,14 +246,18 @@
       height: auto !important;
     }
 
-    /* ER Diagram expanded wrapper */
+    /* ER Diagram - constrained to exactly one printed page */
     .er-diagram-wrapper {
       width: 100%;
-      padding: 0.5rem 0;
+      padding: 0.25rem 0;
       display: block;
       text-align: center;
+      page-break-before: always;
+      break-before: always;
       page-break-inside: avoid;
       break-inside: avoid;
+      page-break-after: avoid;
+      break-after: avoid;
     }
 
     .er-diagram-wrapper pre.mermaid {
@@ -263,8 +267,20 @@
 
     .er-diagram-wrapper pre.mermaid svg {
       max-width: 100% !important;
-      height: auto !important;
       width: 100% !important;
+      max-height: 680px !important;
+      height: auto !important;
+      display: block;
+      margin: 0 auto;
+    }
+
+    @media print {
+      .er-diagram-wrapper pre.mermaid svg {
+        max-height: 680px !important;
+        height: 680px !important;
+        width: 100% !important;
+        max-width: 100% !important;
+      }
     }
 
     /* Print instruction banner */
