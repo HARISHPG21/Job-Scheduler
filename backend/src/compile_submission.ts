@@ -187,8 +187,8 @@ const htmlTemplate = `<!DOCTYPE html>
       body {
         padding: 0;
         max-width: 100%;
-        font-size: 10.5px;
-        line-height: 1.12;
+        font-size: 10px;
+        line-height: 1.1;
       }
       .page-break {
         page-break-before: always;
@@ -197,21 +197,21 @@ const htmlTemplate = `<!DOCTYPE html>
         display: none !important;
       }
       pre {
-        padding: 0.25rem;
-        font-size: 8px !important;
-        margin-bottom: 0.25rem;
+        padding: 0.2rem;
+        font-size: 7.5px !important;
+        margin-bottom: 0.2rem;
       }
       table {
-        font-size: 8.5px;
-        margin-bottom: 0.35rem;
+        font-size: 8px;
+        margin-bottom: 0.3rem;
       }
       p, li {
-        font-size: 10.5px;
-        margin-bottom: 0.1rem;
+        font-size: 10px;
+        margin-bottom: 0.08rem;
       }
-      h1 { font-size: 1.4rem; margin-top: 0.5rem; margin-bottom: 0.25rem; }
-      h2 { font-size: 1.05rem; margin-top: 0.5rem; }
-      h3 { font-size: 0.9rem; }
+      h1 { font-size: 1.35rem; margin-top: 0.4rem; margin-bottom: 0.2rem; }
+      h2 { font-size: 1.0rem; margin-top: 0.4rem; }
+      h3 { font-size: 0.85rem; }
     }
 
     h1, h2, h3, h4 {
@@ -475,7 +475,7 @@ const htmlTemplate = `<!DOCTYPE html>
   </div>
 
   <!-- Section 3: Database Design -->
-  <div class="page-break">
+  <div>
     <h1>3. Relational Database Design</h1>
     ${simpleMarkdownToHtml(dbDesign)}
   </div>
@@ -487,13 +487,13 @@ const htmlTemplate = `<!DOCTYPE html>
   </div>
 
   <!-- Section 5: Design Decisions -->
-  <div class="page-break">
+  <div>
     <h1>5. Architectural Design Decisions</h1>
     ${simpleMarkdownToHtml(designDecisions)}
   </div>
 
   <!-- Section 6: Key Code Snippets -->
-  <div class="page-break">
+  <div>
     <h1>6. Key Code Highlight</h1>
     <h2>Atomic Claiming Transaction (Concurreny Safe)</h2>
     <p>To avoid race conditions and prevent multiple workers from claiming the same job under load, the claiming loop executes inside an interactive database transaction. It verifies concurrency limits, queue states, and job dependencies before committing the status update to <code>RUNNING</code>:</p>
