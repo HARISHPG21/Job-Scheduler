@@ -331,13 +331,6 @@
 <p>---</p>
 <h2>🛠️ System Architecture</h2>
 <p>Our engine decouples the HTTP Web API from the background worker executor nodes. This allows for independent horizontal scaling.</p>
-<pre class="mermaid">graph TD
-    Dashboard[React Dashboard] &lt;--&gt;|HTTP / WebSockets| Server[Express Server]
-    Worker1[Worker Node 1] &lt;--&gt;|Poll / Heartbeat| Server
-    Worker2[Worker Node 2] &lt;--&gt;|Poll / Heartbeat| Server
-    Server &lt;--&gt;|Prisma Client| Database[(SQLite DB)]
-    Server --&gt;|Cron Check| CronManager[Cron/Schedule Loop]
-    Server --&gt;|Worker Health Check| Janitor[Worker Recovery Loop]</pre>
 <h3>Decoupled Monorepo Flow</h3>
 1. <strong>API Server (Broker)</strong>: Exposes endpoints for scheduling, telemetry, and node registration. Coordinates queues and streams logs.
 2. <strong>Worker Daemon (Executor)</strong>: Stateless, standalone processes that poll the coordinator via HTTP long-polling, spawn asynchronous sandboxed execution tasks, and report health metrics every 3s.
@@ -372,72 +365,12 @@
 <h2>📊 Technical Diagrams</h2>
 <h3>1. Database Entity Relationship (ER) Diagram</h3>
 Our database schema is normalized to 3rd Normal Form (3NF) to isolate tenant projects, runtimes, and execution logs:
-<pre class="mermaid">erDiagram
-  Organization ||--o{ User : member
-  Organization ||--o{ Project : owns
-  Project ||--o{ Queue : contains
-  RetryPolicy ||--o{ Queue : governs
-  Queue ||--o{ Job : buffers
-  Queue ||--o{ ScheduledJob : schedules
-  Queue ||--o{ DeadLetterJob : DLQ
-  Worker ||--o{ Job : executes
-  Worker ||--o{ JobExecution : runs
-  Worker ||--o{ WorkerHeartbeat : heartbeats
-  Job ||--o{ JobExecution : attempts
-  Job ||--o{ JobLog : logs
-  Job ||--o{ DeadLetterJob : DLQ
-  Job ||--o{ Job : depends</pre>
 <h3>2. Reliability &amp; Claim Concurrency Flow</h3>
 This sequence diagram illustrates the lifecycle of job claiming, log streaming, and task completion:
-<pre class="mermaid">sequenceDiagram
-  participant Worker as Worker Node
-  participant Server as API Server
-  participant DB as SQLite (Prisma)
-
-  Worker-&gt;&gt;Server: POST /api/workers/claim (workerId)
-  Server-&gt;&gt;DB: Start Interactive Transaction
-  DB-&gt;&gt;DB: Lock next eligible Job row
-  DB-&gt;&gt;DB: Validate Concurrency, Rate limits &amp; Parent dependencies
-  DB-&gt;&gt;DB: Update status = 'RUNNING', assign workerId
-  Server--&gt;&gt;Worker: Return Job payload &amp; executionId
-  Note over Worker,Server: Asynchronous Execution &amp; Log Streaming
-  Worker-&gt;&gt;Server: POST /api/workers/jobs/:jobId/log (stdout traces)
-  Server-&gt;&gt;DB: INSERT JobLog record
-  Worker-&gt;&gt;Server: POST /api/workers/complete (output data)
-  Server-&gt;&gt;DB: Update status = 'COMPLETED', log finish times
-  Server--&gt;&gt;Worker: 200 OK (Job success committed)</pre>
 <h3>3. REST API Routing Tree</h3>
 All coordinator endpoints are structured logically by resource context:
-<pre class="mermaid">flowchart TB
-  classDef api fill:#0f172a,stroke:#8b5cf6,color:#f8fafc;
-  classDef endpoint fill:#1e293b,stroke:#818cf8,color:#e2e8f0;
-
-  API["API Router\nExpress /api"]:::api
-  Auth["/api/auth\n/register, /login"]:::endpoint
-  Projects["/api/projects\nGET, POST"]:::endpoint
-  Queues["/api/queues\nGET, POST, PUT /:id"]:::endpoint
-  Jobs["/api/jobs\nPOST, POST /batch, GET /:id, POST /:id/cancel"]:::endpoint
-  Workers["/api/workers\n/register, /heartbeat, /claim, /complete, /fail"]:::endpoint
-  DLQ["/api/jobs/dlq\nGET, POST /:id/retry, DELETE /:id, POST /retry-all, POST /purge"]:::endpoint
-
-  API --&gt; Auth
-  API --&gt; Projects
-  API --&gt; Queues
-  API --&gt; Jobs
-  API --&gt; Workers
-  API --&gt; DLQ</pre>
 <h3>4. Automated Testing Context</h3>
 Our test runner manages test environments dynamically to guarantee sandboxed reliability:
-<pre class="mermaid">flowchart TD
-  classDef test fill:#0f172a,stroke:#818cf8,color:#f8fafc;
-  Setup["Isolated Sandbox\ntest.db creation"]:::test
-  Run["Jest Test Suite\n9 E2E Integration Checks"]:::test
-  Assert["Assert Concurrency cap,\nRate limits, &amp; Backoff retries"]:::test
-  Cleanup["Tear Down\nRemove test.db"]:::test
-
-  Setup --&gt; Run
-  Run --&gt; Assert
-  Assert --&gt; Cleanup</pre>
 <p>---</p>
 <h2>⚡ Concurrency &amp; Reliability Highlights</h2>
 <h3>1. Atomic Job Claiming Transaction</h3>

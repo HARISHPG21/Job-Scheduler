@@ -77,7 +77,8 @@ function simpleMarkdownToHtml(markdown: string): string {
   return html;
 }
 
-const readme = readDocFile('README.md');
+const readmeRaw = readDocFile('README.md');
+const readme = readmeRaw.replace(/```mermaid[\s\S]*?```/g, '');
 const architecture = readDocFile('docs/architecture.md');
 const dbDesign = readDocFile('docs/db_design.md');
 const apiDocs = readDocFile('docs/api_docs.md');
