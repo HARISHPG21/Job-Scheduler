@@ -76,6 +76,94 @@ graph TD
 
 ---
 
+## 📊 Technical Diagrams
+
+### 1. Database Entity Relationship (ER) Diagram
+Our database schema is normalized to 3rd Normal Form (3NF) to isolate tenant projects, runtimes, and execution logs:
+
+```mermaid
+erDiagram
+  Organization ||--o{ User : member
+  Organization ||--o{ Project : owns
+  Project ||--o{ Queue : contains
+  RetryPolicy ||--o{ Queue : governs
+  Queue ||--o{ Job : buffers
+  Queue ||--o{ ScheduledJob : schedules
+  Queue ||--o{ DeadLetterJob : DLQ
+  Worker ||--o{ Job : executes
+  Worker ||--o{ JobExecution : runs
+  Worker ||--o{ WorkerHeartbeat : heartbeats
+  Job ||--o{ JobExecution : attempts
+  Job ||--o{ JobLog : logs
+  Job ||--o{ DeadLetterJob : DLQ
+  Job ||--o{ Job : depends
+```
+
+### 2. Reliability & Claim Concurrency Flow
+This sequence diagram illustrates the lifecycle of job claiming, log streaming, and task completion:
+
+```mermaid
+sequenceDiagram
+  participant Worker as Worker Node
+  participant Server as API Server
+  participant DB as SQLite (Prisma)
+
+  Worker->>Server: POST /api/workers/claim (workerId)
+  Server->>DB: Start Interactive Transaction
+  DB->>DB: Lock next eligible Job row
+  DB->>DB: Validate Concurrency, Rate limits & Parent dependencies
+  DB->>DB: Update status = 'RUNNING', assign workerId
+  Server-->>Worker: Return Job payload & executionId
+  Note over Worker,Server: Asynchronous Execution & Log Streaming
+  Worker->>Server: POST /api/workers/jobs/:jobId/log (stdout traces)
+  Server->>DB: INSERT JobLog record
+  Worker->>Server: POST /api/workers/complete (output data)
+  Server->>DB: Update status = 'COMPLETED', log finish times
+  Server-->>Worker: 200 OK (Job success committed)
+```
+
+### 3. REST API Routing Tree
+All coordinator endpoints are structured logically by resource context:
+
+```mermaid
+flowchart TB
+  classDef api fill:#0f172a,stroke:#8b5cf6,color:#f8fafc;
+  classDef endpoint fill:#1e293b,stroke:#818cf8,color:#e2e8f0;
+
+  API["API Router\nExpress /api"]:::api
+  Auth["/api/auth\n/register, /login"]:::endpoint
+  Projects["/api/projects\nGET, POST"]:::endpoint
+  Queues["/api/queues\nGET, POST, PUT /:id"]:::endpoint
+  Jobs["/api/jobs\nPOST, POST /batch, GET /:id, POST /:id/cancel"]:::endpoint
+  Workers["/api/workers\n/register, /heartbeat, /claim, /complete, /fail"]:::endpoint
+  DLQ["/api/jobs/dlq\nGET, POST /:id/retry, DELETE /:id, POST /retry-all, POST /purge"]:::endpoint
+
+  API --> Auth
+  API --> Projects
+  API --> Queues
+  API --> Jobs
+  API --> Workers
+  API --> DLQ
+```
+
+### 4. Automated Testing Context
+Our test runner manages test environments dynamically to guarantee sandboxed reliability:
+
+```mermaid
+flowchart TD
+  classDef test fill:#0f172a,stroke:#818cf8,color:#f8fafc;
+  Setup["Isolated Sandbox\ntest.db creation"]:::test
+  Run["Jest Test Suite\n9 E2E Integration Checks"]:::test
+  Assert["Assert Concurrency cap,\nRate limits, & Backoff retries"]:::test
+  Cleanup["Tear Down\nRemove test.db"]:::test
+
+  Setup --> Run
+  Run --> Assert
+  Assert --> Cleanup
+```
+
+---
+
 ## ⚡ Concurrency & Reliability Highlights
 
 ### 1. Atomic Job Claiming Transaction
@@ -137,7 +225,7 @@ npm run dev
 
 ## 🧪 Running Automated Tests
 
-E2E integration tests are run in isolated SQLite contexts (`test.db`) to assert concurrency safety, rate limits, and priority ordering without wiping development records:
+E2E integration tests are run in isolated SQLite contexts (`test.db`) to assert concurrency safety and correct calculations without wiping development records:
 
 ```bash
 npm run test
