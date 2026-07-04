@@ -179,7 +179,7 @@ const htmlTemplate = `<!DOCTYPE html>
     body {
       font-family: var(--font-sans);
       color: var(--text);
-      line-height: 1.4;
+      line-height: 1.25;
       background: #ffffff;
       padding: 2rem;
       max-width: 900px;
@@ -204,8 +204,8 @@ const htmlTemplate = `<!DOCTYPE html>
       font-family: var(--font-title);
       color: #111827;
       font-weight: 700;
-      margin-top: 1rem;
-      margin-bottom: 0.5rem;
+      margin-top: 0.75rem;
+      margin-bottom: 0.3rem;
     }
 
     h1 {
@@ -229,16 +229,16 @@ const htmlTemplate = `<!DOCTYPE html>
     p, li {
       font-size: 0.95rem;
       color: var(--text-light);
-      margin-bottom: 0.5rem;
+      margin-bottom: 0.3rem;
     }
 
     ul {
       margin-left: 1.5rem;
-      margin-bottom: 1rem;
+      margin-bottom: 0.5rem;
     }
 
     li {
-      margin-bottom: 0.2rem;
+      margin-bottom: 0.1rem;
     }
 
     code {
