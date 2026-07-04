@@ -175,9 +175,9 @@ const htmlTemplate = `<!DOCTYPE html>
     body {
       font-family: var(--font-sans);
       color: var(--text);
-      line-height: 1.25;
+      line-height: 1.15;
       background: #ffffff;
-      padding: 2rem;
+      padding: 1rem;
       max-width: 900px;
       margin: 0 auto;
     }
@@ -218,8 +218,8 @@ const htmlTemplate = `<!DOCTYPE html>
       font-family: var(--font-title);
       color: #111827;
       font-weight: 700;
-      margin-top: 0.75rem;
-      margin-bottom: 0.3rem;
+      margin-top: 0.5rem;
+      margin-bottom: 0.2rem;
     }
 
     h1 {
@@ -233,7 +233,7 @@ const htmlTemplate = `<!DOCTYPE html>
       font-size: 1.5rem;
       border-bottom: 1px solid var(--border);
       padding-bottom: 0.25rem;
-      margin-top: 2rem;
+      margin-top: 1rem;
     }
 
     h3 {
@@ -243,7 +243,7 @@ const htmlTemplate = `<!DOCTYPE html>
     p, li {
       font-size: 0.95rem;
       color: var(--text-light);
-      margin-bottom: 0.3rem;
+      margin-bottom: 0.2rem;
     }
 
     ul {
@@ -266,10 +266,10 @@ const htmlTemplate = `<!DOCTYPE html>
 
     pre {
       background: #0f172a;
-      padding: 1.25rem;
+      padding: 0.75rem;
       border-radius: 12px;
       overflow-x: auto;
-      margin-bottom: 1.25rem;
+      margin-bottom: 0.5rem;
       border: 1px solid var(--border);
     }
 
@@ -277,7 +277,7 @@ const htmlTemplate = `<!DOCTYPE html>
       background: transparent;
       color: #f8fafc;
       font-family: var(--font-mono);
-      font-size: 0.85rem;
+      font-size: 0.75rem;
       padding: 0;
     }
 
